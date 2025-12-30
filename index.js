@@ -1,7 +1,7 @@
 // Importation des modules nécessaires
 const express = require('express');
 const cors = require('cors');
-const { initializePromise } = require('./database');
+const { initializePromise, db } = require('./database');
 const carsController = require('./controllers/usersControllers');
 const checkApiKey = require('./middleware/checkApiKey');
 
@@ -48,8 +48,111 @@ app.use((req, res) => {
   });
 });
 
+// Données de test pour initialisation automatique
+const sampleCars = [
+  {
+    brand: 'Ferrari',
+    model: '250 GTO',
+    year: 1962,
+    color: 'Rouge',
+    price: 45000000,
+    mileage: 12000,
+    description: 'Voiture de collection exceptionnelle',
+  },
+  {
+    brand: 'Porsche',
+    model: '911 Carrera RS',
+    year: 1973,
+    color: 'Blanc',
+    price: 850000,
+    mileage: 45000,
+    description: 'Légendaire modèle RS',
+  },
+  {
+    brand: 'Jaguar',
+    model: 'E-Type',
+    year: 1961,
+    color: 'Bleu',
+    price: 320000,
+    mileage: 78000,
+    description: 'Icône du design automobile',
+  },
+  {
+    brand: 'Mercedes-Benz',
+    model: '300 SL',
+    year: 1955,
+    color: 'Argent',
+    price: 1200000,
+    mileage: 34000,
+    description: 'Portes papillon emblématiques',
+  },
+  {
+    brand: 'Aston Martin',
+    model: 'DB5',
+    year: 1964,
+    color: 'Gris',
+    price: 750000,
+    mileage: 56000,
+    description: 'La voiture de James Bond',
+  },
+];
+
+// Fonction pour initialiser la base avec des données de test si elle est vide
+function seedIfEmpty() {
+  return new Promise((resolve, reject) => {
+    db.get('SELECT COUNT(*) as count FROM cars', (err, row) => {
+      if (err) {
+        console.error('❌  Erreur lors de la vérification de la base:', err.message);
+        reject(err);
+        return;
+      }
+
+      if (row.count === 0) {
+        console.log('📦 Base de données vide, initialisation avec des données de test...');
+        const insertQuery = `
+          INSERT INTO cars (brand, model, year, color, price, mileage, description)
+          VALUES (?, ?, ?, ?, ?, ?, ?)
+        `;
+
+        let insertedCount = 0;
+        sampleCars.forEach((car) => {
+          db.run(
+            insertQuery,
+            [
+              car.brand,
+              car.model,
+              car.year,
+              car.color,
+              car.price,
+              car.mileage,
+              car.description,
+            ],
+            (insertErr) => {
+              if (insertErr) {
+                console.error('❌  Erreur lors de l'insertion:', insertErr.message);
+                reject(insertErr);
+                return;
+              }
+
+              insertedCount += 1;
+              if (insertedCount === sampleCars.length) {
+                console.log(`✅  ${insertedCount} voitures insérées avec succès`);
+                resolve();
+              }
+            },
+          );
+        });
+      } else {
+        console.log(`✅  Base de données contient déjà ${row.count} voiture(s)`);
+        resolve();
+      }
+    });
+  });
+}
+
 // Démarrage du serveur après initialisation de la base
 initializePromise
+  .then(() => seedIfEmpty())
   .then(() => {
     app.listen(PORT, () => {
       console.log(`🚀 Serveur démarré sur le port ${PORT}`);
@@ -57,6 +160,6 @@ initializePromise
     });
   })
   .catch((err) => {
-    console.error('❌  Échec de l’initialisation de la base de données:', err.message);
+    console.error('❌  Échec de l'initialisation de la base de données:', err.message);
     process.exit(1);
   });
