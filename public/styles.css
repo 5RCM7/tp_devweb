@@ -1,0 +1,17 @@
+body {
+  min-height: 100vh;
+}
+
+main.container {
+  max-width: 1100px;
+}
+
+#cars-table tbody tr td {
+  vertical-align: middle;
+}
+
+#alert-container {
+  margin-bottom: 0.75rem;
+}
+
+

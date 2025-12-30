@@ -15,6 +15,9 @@ const PORT = process.env.PORT || 3000;
 app.use(cors()); // Autorise les requêtes cross-origin
 app.use(express.json()); // Parse le JSON des requêtes
 
+// Servir les fichiers statiques du dossier "public" (interface frontend)
+app.use(express.static('public'));
+
 // Route de bienvenue
 app.get('/', (req, res) => {
   res.json({
