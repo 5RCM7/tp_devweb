@@ -1,3 +1,13 @@
+/**
+ * ============================================
+ * STYLES.CSS - Styles personnalisés
+ * ============================================
+ * 
+ * Styles additionnels pour améliorer l'apparence
+ * et la responsivité de l'interface.
+ */
+
+/* Structure de base */
 body {
   min-height: 100vh;
 }
@@ -6,12 +16,53 @@ main.container {
   max-width: 1100px;
 }
 
+/* Tableau responsive */
 #cars-table tbody tr td {
   vertical-align: middle;
 }
 
+/* Liens dans le tableau - amélioration de l'accessibilité */
+#cars-table tbody tr td a {
+  color: inherit;
+  font-weight: 500;
+}
+
+#cars-table tbody tr td a:hover {
+  text-decoration: underline;
+}
+
+/* Conteneur d'alertes */
 #alert-container {
   margin-bottom: 0.75rem;
+}
+
+/* Responsive : masquer certaines colonnes sur petits écrans */
+@media (max-width: 768px) {
+  #cars-table th:nth-child(5),
+  #cars-table td:nth-child(5),
+  #cars-table th:nth-child(6),
+  #cars-table td:nth-child(6),
+  #cars-table th:nth-child(7),
+  #cars-table td:nth-child(7) {
+    display: none;
+  }
+}
+
+/* Amélioration de l'accessibilité : focus visible */
+.btn:focus,
+.form-control:focus {
+  outline: 2px solid #0d6efd;
+  outline-offset: 2px;
+}
+
+/* Espacement pour les cartes */
+.card {
+  border: none;
+}
+
+/* Amélioration de la lisibilité */
+.text-muted {
+  color: #6c757d !important;
 }
 
 

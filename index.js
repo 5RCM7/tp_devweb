@@ -129,7 +129,7 @@ function seedIfEmpty() {
             ],
             (insertErr) => {
               if (insertErr) {
-                console.error('❌  Erreur lors de l'insertion:', insertErr.message);
+                console.error('❌  Erreur lors de l\'insertion:', insertErr.message);
                 reject(insertErr);
                 return;
               }
@@ -160,6 +160,6 @@ initializePromise
     });
   })
   .catch((err) => {
-    console.error('❌  Échec de l'initialisation de la base de données:', err.message);
+    console.error('❌  Échec de l\'initialisation de la base de données:', err.message);
     process.exit(1);
   });
