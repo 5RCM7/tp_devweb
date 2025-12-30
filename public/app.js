@@ -1,5 +1,6 @@
 // Configuration de base
-const API_BASE_URL = 'http://localhost:3000/api/cars';
+// URL relative pour fonctionner en local ET sur Render (même domaine)
+const API_BASE_URL = '/api/cars';
 const API_KEY = 'ma-super-cle-api-2024';
 
 // Sélecteurs DOM
